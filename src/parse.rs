@@ -83,8 +83,8 @@ struct Meta {
 
 #[derive(Deserialize, Debug)]
 struct Events {
-    dividends: HashMap<String, Dividend>,
-    splits: HashMap<String, Split>,
+    dividends: Option<HashMap<String, Dividend>>,
+    splits: Option<HashMap<String, Split>>,
 }
 
 #[derive(Deserialize, Debug)]
