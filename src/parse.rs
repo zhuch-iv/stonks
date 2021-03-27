@@ -11,7 +11,7 @@ pub struct Ticker {
     pub daily_change: f64,
     pub wk_change: f64,
     pub mo_change: f64,
-    pub y_change: f64,
+    pub yr_change: f64,
 }
 
 const ERROR_MSG: &str = "Failed to read response from server";
@@ -20,15 +20,14 @@ impl TryFrom<Response> for Ticker {
     type Error = anyhow::Error;
 
     fn try_from(response: Response) -> Result<Self, Self::Error> {
-        let mut  result = response
+        let mut result = response
             .chart
             .result
             .with_context(|| ERROR_MSG)? //TODO
             .pop()
             .with_context(|| ERROR_MSG)?; //TODO
 
-        let quote = result.indicators.quote.pop()
-            .with_context(|| ERROR_MSG)?; //TODO
+        let quote = result.indicators.quote.pop().with_context(|| ERROR_MSG)?; //TODO
 
         let open = quote.open;
         let close = quote.close;
@@ -39,7 +38,7 @@ impl TryFrom<Response> for Ticker {
             daily_change: calc_change(value, open[open.len() - 1]),
             wk_change: calc_change(value, close[close.len() - 2]),
             mo_change: calc_change(value, close[close.len() - 5]),
-            y_change: calc_change(value, close[0]),
+            yr_change: calc_change(value, close[0]),
         })
     }
 }
